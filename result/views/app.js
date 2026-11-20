@@ -7,6 +7,8 @@ var bg2 = document.getElementById('background-stats-2');
 app.controller('statsCtrl', function($scope){
   $scope.aPercent = 50;
   $scope.bPercent = 50;
+  $scope.optionA = 'Cats';
+  $scope.optionB = 'Dogs';
 
   var updateScores = function(){
     socket.on('scores', function (json) {
@@ -32,6 +34,10 @@ app.controller('statsCtrl', function($scope){
     updateScores();
   };
   socket.on('message',function(data){
+    $scope.$apply(function () {
+      $scope.optionA = data.optionA;
+      $scope.optionB = data.optionB;
+    });
     init();
   });
 });

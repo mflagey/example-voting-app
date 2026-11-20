@@ -11,7 +11,11 @@ var port = process.env.PORT || 4000;
 
 io.on('connection', function (socket) {
 
-  socket.emit('message', { text : 'Welcome!' });
+  socket.emit('message', {
+    text: 'Welcome!',
+    optionA: process.env.OPTION_A ?? 'Cats',
+    optionB: process.env.OPTION_B ?? 'Dogs'
+  });
 
   socket.on('subscribe', function (data) {
     socket.join(data.channel);
