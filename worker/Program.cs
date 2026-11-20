@@ -1,6 +1,7 @@
 using System;
 using System.Data.Common;
 using System.Linq;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -16,12 +17,16 @@ namespace Worker
         {
             try
             {
+                var passwordFile = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD_FILE");
+                var password = !string.IsNullOrEmpty(passwordFile)
+                    ? File.ReadAllText(passwordFile).TrimEnd('\r', '\n')
+                    : Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "postgres";
                 var connectionString = new NpgsqlConnectionStringBuilder
                 {
                     Host = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "db",
                     Database = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "postgres",
                     Username = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "postgres",
-                    Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? "postgres"
+                    Password = password
                 }.ConnectionString;
                 var redisHost = Environment.GetEnvironmentVariable("REDIS_HOST") ?? "redis";
 
