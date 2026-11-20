@@ -30,7 +30,7 @@ var pool = new Pool({
   host: process.env.POSTGRES_HOST ?? 'db',
   user: process.env.POSTGRES_USER ?? 'postgres',
   password: postgresPassword,
-  database: 'postgres'
+  database: process.env.POSTGRES_DB ?? 'postgres'
 });
 
 async.retry(
